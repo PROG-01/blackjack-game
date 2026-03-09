@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    height: 100vh; 
+    background-color: whitesmoke;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+.container {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    width: 600px;
+    height: 400px;
+    padding: 60px;
+    background-color: darkgreen;
+    box-sizing: border-box;
+}
+
+.dealer-scores, .player-scores {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hit, #stand, #start {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#hit {
+    color: white;
+    background-color: blue;
+}
+
+#stand {
+    color: white;
+    background-color: red;
+}
+
+#start {
+    color: black;
+    background-color: goldenrod;
+}
+
+h1 {
+    text-align: center;
+}
