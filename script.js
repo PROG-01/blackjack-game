@@ -1,4 +1,5 @@
-let cards = [
+let cards = 
+[
     { "rank": "A", "value": 11 },
     { "rank": "2", "value": 2 },
     { "rank": "3", "value": 3 },
@@ -12,7 +13,7 @@ let cards = [
     { "rank": "J", "value": 10 },
     { "rank": "Q", "value": 10 },
     { "rank": "K", "value": 10 }
-  ];
+];
   let playerScore = document.getElementById("player-score");
   let dealerScore = document.getElementById("dealer-score");
   let playerCard = document.getElementById("player");
@@ -20,6 +21,7 @@ let cards = [
   let hitButton = document.getElementById("hit");
   let standButton = document.getElementById("stand");
   let startButton = document.getElementById("start");
+  let message = document.getElementById("message");
 
   // Initialising score values
   let playerScoreValue = 0;
@@ -54,32 +56,38 @@ startButton.addEventListener("click", function () {
 });
 
 hitButton.addEventListener("click", function() {
-  if (playerScoreValue === 0) {
+  if (playerScoreValue === 0) 
+  {
     alert("Please start the game first!");
     return;
   }
-
-  if (playerScoreValue < 17) {
+  else if (playerScoreValue < 17) 
+  {
     let randomCard = cards[Math.floor(Math.random() * cards.length)];
     playerCard.textContent += ` ${randomCard.rank}`;
     playerScoreValue += randomCard.value;
     playerScore.textContent = "Score: " + playerScoreValue;
-  } else {
+  } 
+  else 
+  {
     alert("Player stands. Final Scores - Player: " + playerScoreValue + ", Dealer: " + dealerScoreValue);
   }
 })
 
 standButton.addEventListener("click", function() {
-  if (playerScoreValue === 0) {
+  if (playerScoreValue === 0) 
+  {
     alert("Please start the game first!");
     return;
   }
-  if (dealerScoreValue < 17) {
+  else if (dealerScoreValue < 17) 
+  {
     let randomCard = cards[Math.floor(Math.random() * cards.length)];
     dealerCard.textContent += ` ${randomCard.rank}`;
     dealerScoreValue += randomCard.value;
     dealerScore.textContent = "Score: " + dealerScoreValue;
-  } else {
+  } else 
+  {
     alert("Dealer stands. Final Scores - Player: " + playerScoreValue + ", Dealer: " + dealerScoreValue);
   }
 })
