@@ -23,20 +23,40 @@ let cards =
   let startButton = document.getElementById("start");
   let message = document.getElementById("message");
 
-  // Initialising score values
   let playerScoreValue = 0;
   let dealerScoreValue = 0;
+  let gameStarted = false;
 
-  // playerScore.textContent = " ";
-  // dealerScore.textContent = " "; 
+  function checkPlayerStatus() {
+     if (playerScoreValue === 21) {
+    message.textContent = "You have got Blackjack!";
+} else if (playerScoreValue > 21) {
+    message.textContent = "You have busted!";
+} else {
+    message.textContent = "Do you want to draw a new card?";
+}
+
+}
+
+function checkDealerStatus() {
+  if (dealerScoreValue === 21) {
+    message.textContent = "Dealer has got Blackjack!";
+} else if (dealerScoreValue > 21) {
+    message.textContent = "Dealer has busted!";
+} else {
+    message.textContent = "Do you want to draw a new card?";
+}
+
+}
 
 startButton.addEventListener("click", function () {
-
   // Prevent restarting game
-  if (playerScoreValue !== 0 || dealerScoreValue !== 0) {
-    alert("Game already started!");
+  if (gameStarted) {
+    message.textContent = "Game already started!";
     return;
   } 
+
+  gameStarted = true;
 
   // Draw random cards
   let p1 = cards[Math.floor(Math.random() * cards.length)];
@@ -55,39 +75,37 @@ startButton.addEventListener("click", function () {
   dealerScore.textContent = "Score: " + dealerScoreValue;
 });
 
+
 hitButton.addEventListener("click", function() {
-  if (playerScoreValue === 0) 
+  if (!gameStarted) 
   {
-    alert("Please start the game first!");
+    message.textContent = "Please start the game first!";
     return;
   }
-  else if (playerScoreValue < 17) 
-  {
+ 
+  gameStarted = true;
+  
+    message.textContent = "Do you wish to draw another card?";
     let randomCard = cards[Math.floor(Math.random() * cards.length)];
     playerCard.textContent += ` ${randomCard.rank}`;
     playerScoreValue += randomCard.value;
     playerScore.textContent = "Score: " + playerScoreValue;
-  } 
-  else 
-  {
-    alert("Player stands. Final Scores - Player: " + playerScoreValue + ", Dealer: " + dealerScoreValue);
-  }
+
 })
 
 standButton.addEventListener("click", function() {
-  if (playerScoreValue === 0) 
+  if (!gameStarted) 
   {
-    alert("Please start the game first!");
+    message.textContent = "Please start the game first!";
     return;
   }
-  else if (dealerScoreValue < 17) 
-  {
+  
+  gameStarted = true;
     let randomCard = cards[Math.floor(Math.random() * cards.length)];
     dealerCard.textContent += ` ${randomCard.rank}`;
     dealerScoreValue += randomCard.value;
     dealerScore.textContent = "Score: " + dealerScoreValue;
-  } else 
-  {
-    alert("Dealer stands. Final Scores - Player: " + playerScoreValue + ", Dealer: " + dealerScoreValue);
-  }
+  
+    message.textContent = `Dealer stands. Final Scores - Player: ${playerScoreValue}, Dealer: ${dealerScoreValue}`;
+
 })
