@@ -37,7 +37,7 @@ let cards =
     message.textContent = "You have busted!";
     isAlive = false;
 } else {
-    message.textContent = "Do you want to draw a new card?";
+    message.textContent = "Do you want to draw another card?";
 }
 }
 
@@ -69,11 +69,11 @@ function dealerTurn() {
       dealerScoreValue += randomCard.value;
       dealerScore.textContent = "Score: " + dealerScoreValue;
 
-      // ⏳ Wait 1 second, then draw again
+      // Wait, then draw again
       setTimeout(drawCard, 1000);
 
     } else {
-      // ✅ Done drawing → decide winner
+      // Done drawing → decide winner
       decideWinner();
     }
   }
