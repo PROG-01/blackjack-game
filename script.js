@@ -25,17 +25,20 @@ let cards =
 
   let playerScoreValue = 0;
   let dealerScoreValue = 0;
+
   let gameStarted = false;
+  let isAlive = false;
 
   function checkPlayerStatus() {
      if (playerScoreValue === 21) {
     message.textContent = "You have got Blackjack!";
+    isAlive = false;
 } else if (playerScoreValue > 21) {
     message.textContent = "You have busted!";
+    isAlive = false;
 } else {
     message.textContent = "Do you want to draw a new card?";
 }
-
 }
 
 function checkDealerStatus() {
@@ -46,16 +49,46 @@ function checkDealerStatus() {
 } else {
     message.textContent = "Do you want to draw a new card?";
 }
+}
 
+function resetGame(){
+
+  playerScoreValue = 0;
+  dealerScoreValue = 0;
+  playerCard.textContent = "Player:";
+  dealerCard.textContent = "Dealer:";
+}
+
+function dealerTurn() {
+
+  function drawCard() {
+    if (dealerScoreValue <= 17) {
+
+      let randomCard = cards[Math.floor(Math.random() * cards.length)];
+      dealerCard.textContent += ` ${randomCard.rank}`;
+      dealerScoreValue += randomCard.value;
+      dealerScore.textContent = "Score: " + dealerScoreValue;
+
+      // ⏳ Wait 1 second, then draw again
+      setTimeout(drawCard, 1000);
+
+    } else {
+      // ✅ Done drawing → decide winner
+      decideWinner();
+    }
+  }
+
+  drawCard(); // start the process
 }
 
 startButton.addEventListener("click", function () {
   // Prevent restarting game
-  if (gameStarted) {
+  if (isAlive) {
     message.textContent = "Game already started!";
     return;
-  } 
-
+  }
+  resetGame();
+  isAlive = true;
   gameStarted = true;
 
   // Draw random cards
@@ -73,39 +106,46 @@ startButton.addEventListener("click", function () {
   dealerScoreValue = d1.value + d2.value;
   playerScore.textContent = "Score: " + playerScoreValue;
   dealerScore.textContent = "Score: " + dealerScoreValue;
+
+  checkPlayerStatus();
 });
 
 
 hitButton.addEventListener("click", function() {
-  if (!gameStarted) 
-  {
+  if (!gameStarted || !isAlive) {
     message.textContent = "Please start the game first!";
     return;
   }
- 
-  gameStarted = true;
-  
-    message.textContent = "Do you wish to draw another card?";
-    let randomCard = cards[Math.floor(Math.random() * cards.length)];
-    playerCard.textContent += ` ${randomCard.rank}`;
-    playerScoreValue += randomCard.value;
-    playerScore.textContent = "Score: " + playerScoreValue;
 
+  message.textContent = "Do you wish to draw another card?";
+  let randomCard = cards[Math.floor(Math.random() * cards.length)];
+  playerCard.textContent += ` ${randomCard.rank}`;
+  playerScoreValue += randomCard.value;
+  playerScore.textContent = "Score: " + playerScoreValue;
+    
+    checkPlayerStatus();
 })
 
 standButton.addEventListener("click", function() {
-  if (!gameStarted) 
-  {
+  if (!gameStarted || !isAlive) {
     message.textContent = "Please start the game first!";
     return;
   }
-  
-  gameStarted = true;
-    let randomCard = cards[Math.floor(Math.random() * cards.length)];
-    dealerCard.textContent += ` ${randomCard.rank}`;
-    dealerScoreValue += randomCard.value;
-    dealerScore.textContent = "Score: " + dealerScoreValue;
-  
-    message.textContent = `Dealer stands. Final Scores - Player: ${playerScoreValue}, Dealer: ${dealerScoreValue}`;
 
+  isAlive = false;
+
+  dealerTurn();
+
+dealerScore.textContent = "Score: " + dealerScoreValue;
+checkPlayerStatus();
+
+// Decide winner
+if (dealerScoreValue > 21 || playerScoreValue > dealerScoreValue) {
+    message.textContent = "You win!";
+} else if (dealerScoreValue > playerScoreValue) {
+    message.textContent = "Dealer wins!";
+} else {
+    message.textContent = "It's a draw!";
+}
+isAlive = false;
 })
