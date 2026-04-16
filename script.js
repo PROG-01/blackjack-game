@@ -48,6 +48,7 @@ function addCardImage(container, rank) {
   container.appendChild(img);
 }
 
+// Function to check player status
 function checkPlayerStatus() {
   if (playerScoreValue === 21) {
     message.textContent = "You have got Blackjack!";
@@ -60,16 +61,20 @@ function checkPlayerStatus() {
   }
 }
 
+// Function to check dealer status
 function checkDealerStatus() {
   if (dealerScoreValue === 21) {
     message.textContent = "Dealer has got Blackjack!";
+    isAlive = false;
   } else if (dealerScoreValue > 21) {
     message.textContent = "Dealer has busted!";
+    isAlive = false;
   } else {
     message.textContent = "Do you want to draw a new card?";
   }
 }
 
+// Function to reset the game
 function resetGame() {
   playerScoreValue = 0;
   dealerScoreValue = 0;
@@ -77,23 +82,19 @@ function resetGame() {
   dealerCard.innerHTML = "<p>Dealer:</p>";
 }
 
+// Function to handle dealer's turn
 function dealerTurn() {
-  function drawCard() {
     if (dealerScoreValue <= 17) {
       let randomCard = cards[Math.floor(Math.random() * cards.length)];
       addCardImage(dealerCard, randomCard.rank);
       dealerScoreValue += randomCard.value;
       dealerScore.textContent = "Score: " + dealerScoreValue;
-
-      setTimeout(drawCard, 1000);
     } else {
       decideWinner();
     }
   }
 
-  drawCard();
-}
-
+// Start game function
 startButton.addEventListener("click", function () {
   if (isAlive) {
     message.textContent = "Game already started!";
@@ -121,6 +122,7 @@ startButton.addEventListener("click", function () {
   checkPlayerStatus();
 });
 
+// Hit game function 
 hitButton.addEventListener("click", function() {
   if (!gameStarted || !isAlive) {
     message.textContent = "Please start the game first!";
@@ -135,12 +137,26 @@ hitButton.addEventListener("click", function() {
   checkPlayerStatus();
 });
 
+// Stand game function
 standButton.addEventListener("click", function() {
   if (!gameStarted || !isAlive) {
     message.textContent = "Please start the game first!";
     return;
   }
 
-  isAlive = false;
   dealerTurn();
+
+  checkDealerStatus();
 });
+
+function decideWinner() {
+  if (playerScoreValue > 21) {
+    message.textContent = "Dealer wins!";
+  } else if (dealerScoreValue > 21 || playerScoreValue > dealerScoreValue) {
+    message.textContent = "Player wins!";
+  } else if (playerScoreValue < dealerScoreValue) {
+    message.textContent = "Dealer wins!";
+  } else {
+    message.textContent = "It's a tie!";
+  }
+}
