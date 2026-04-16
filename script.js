@@ -55,6 +55,7 @@ function checkPlayerStatus() {
     isAlive = false;
   } else if (playerScoreValue > 21) {
     message.textContent = "You have busted!";
+    decideWinner();
     isAlive = false;
   } else {
     message.textContent = "Do you want to draw another card?";
@@ -68,6 +69,7 @@ function checkDealerStatus() {
     isAlive = false;
   } else if (dealerScoreValue > 21) {
     message.textContent = "Dealer has busted!";
+    decideWinner();
     isAlive = false;
   } else {
     message.textContent = "Do you want to draw a new card?";
@@ -84,15 +86,23 @@ function resetGame() {
 
 // Function to handle dealer's turn
 function dealerTurn() {
-    if (dealerScoreValue <= 17) {
+  function drawCard() {
+    if (dealerScoreValue < 17) {
       let randomCard = cards[Math.floor(Math.random() * cards.length)];
       addCardImage(dealerCard, randomCard.rank);
       dealerScoreValue += randomCard.value;
       dealerScore.textContent = "Score: " + dealerScoreValue;
+      
+      // Wait 1 second before drawing next card
+      setTimeout(drawCard, 1000);
     } else {
+      // Dealer is done, decide winner
       decideWinner();
     }
   }
+  
+  drawCard();
+}
 
 // Start game function
 startButton.addEventListener("click", function () {
@@ -144,15 +154,16 @@ standButton.addEventListener("click", function() {
     return;
   }
 
-  dealerTurn();
-
-  checkDealerStatus();
+  isAlive = false; // Prevent more hits
+  dealerTurn(); // Start dealer's turn, which calls decideWinner()
 });
 
 function decideWinner() {
   if (playerScoreValue > 21) {
-    message.textContent = "Dealer wins!";
-  } else if (dealerScoreValue > 21 || playerScoreValue > dealerScoreValue) {
+    message.textContent = "You busted! Dealer wins!";
+  } else if (dealerScoreValue > 21) {
+    message.textContent = "Dealer busted! Player wins!";
+  } else if (playerScoreValue > dealerScoreValue) {
     message.textContent = "Player wins!";
   } else if (playerScoreValue < dealerScoreValue) {
     message.textContent = "Dealer wins!";
